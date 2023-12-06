@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #video-container {
+            position: relative;
+            width: 80%;
+        }
+        #video-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            color: #fff;
+        }
+        button {
+            margin: 5px 0;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            background-color: #3498db;
+            color: #fff;
+        }
+        #progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ccc;
+            position: relative;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #progress-bar-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="myVideo" width="100%" height="auto">
+            <source src="Screencast from 06-12-23 05_02_43 PM IST (3).webm" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="video-controls">
+            <button onclick="togglePlayPause()">Play/Pause</button>
+            <div id="progress-bar" onclick="seek(event)">
+                <div id="progress-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var video = document.getElementById("myVideo");
+        var progressBar = document.getElementById("progress-bar");
+        var progressBarFill = document.getElementById("progress-bar-fill");
+
+        function togglePlayPause() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        function skip(value) {
+            video.currentTime += value;
+        }
+
+        function seek(event) {
+            var boundingRect = progressBar.getBoundingClientRect();
+            var percentage = (event.clientX - boundingRect.left) / boundingRect.width;
+            video.currentTime = video.duration * percentage;
+        }
+
+        video.addEventListener("timeupdate", updateProgressBar);
+
+        function updateProgressBar() {
+            var progress = (video.currentTime / video.duration) * 100;
+            progressBarFill.style.width = progress + "%";
+        }
+    </script>
+</body>
+</html>
